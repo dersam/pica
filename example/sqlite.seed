@@ -1,0 +1,11 @@
+CREATE TABLE `crontab` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`command`	TEXT NOT NULL,
+	`minute`	TEXT NOT NULL DEFAULT '*',
+	`hour`	TEXT NOT NULL DEFAULT '*',
+	`day_month`	TEXT NOT NULL DEFAULT '*',
+	`month`	TEXT NOT NULL DEFAULT '*',
+	`day_week`	TEXT NOT NULL DEFAULT '*',
+	`enabled`	INTEGER NOT NULL DEFAULT 1,
+	`label`	TEXT
+);
