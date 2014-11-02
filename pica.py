@@ -1,33 +1,46 @@
 import sqlite3
-import ConfigParser
 import subprocess
 import os
+import sys
+import getopt
 
-#load config
-config = ConfigParser.ConfigParser()
-config.read('pica.conf')
+from pica import config
 
-#get jobs
-conn = sqlite3.connect("example/sample.db")
-c = conn.cursor()
-c.execute("SELECT command, minute, hour, day_month, month, day_week, label "
-          "FROM crontab WHERE enabled = 1 ORDER BY hour DESC, minute DESC")
-jobs = c.fetchall()
-conn.close()
 
-if len(jobs) == 0:
-    print('No jobs found for specified crontab')
-    exit()
+def main(argv):
+    #load config
+    opts, args = getopt.getopt(argv, 'c:', ['configfile='])
+    path = 'pica.conf'
+    for opt, arg in opts:
+        if opt in ('-c', '--configfile'):
+            path = arg
+    config.load(path)
 
-#write crontab file
-crontab = open("crontab.cr", 'w')
-for job in jobs:
-    line = '#'+job[6]+"\n"
-    line = line + job[1] + job[2] + job[3] + job[4] + job[5]+"\n"
-    crontab.write(line)
+    #get jobs
+    conn = sqlite3.connect("example/sample.db")
+    c = conn.cursor()
+    c.execute("SELECT command, minute, hour, day_month, month, day_week, label "
+              "FROM crontab WHERE enabled = 1 ORDER BY hour DESC, minute DESC")
+    jobs = c.fetchall()
+    conn.close()
 
-crontab.close()
+    if len(jobs) == 0:
+        print('No jobs found for specified crontab')
+        exit()
 
-subprocess.call('crontab crontab.cr')
+    #write crontab file
+    crontab = open("crontab.cr", 'w')
+    for job in jobs:
+        line = '#'+job[6]+"\n"
+        line = line + job[1] + job[2] + job[3] + job[4] + job[5]+"\n"
+        crontab.write(line)
 
-os.remove('crontab.cr')
+    crontab.close()
+
+    subprocess.call('crontab crontab.cr')
+
+    os.remove('crontab.cr')
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
