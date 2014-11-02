@@ -10,9 +10,13 @@ config.read('pica.conf')
 conn = sqlite3.connect("example/sample.db")
 c = conn.cursor()
 c.execute("SELECT command, minute, hour, day_month, month, day_week, label "
-          "FROM crontab WHERE enabled = 1 ORDER BY hour DESC minute DESC")
+          "FROM crontab WHERE enabled = 1 ORDER BY hour DESC, minute DESC")
 jobs = c.fetchall()
 conn.close()
+
+if len(jobs) == 0:
+    print('No jobs found for specified crontab')
+    exit()
 
 #write crontab file
 crontab = open("crontab.cr", 'w')
