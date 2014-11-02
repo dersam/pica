@@ -1,6 +1,10 @@
 import sqlite3
-import sys
+import ConfigParser
 import subprocess
+
+#load config
+config = ConfigParser.ConfigParser()
+config.read('pica.conf')
 
 #get jobs
 conn = sqlite3.connect("example/sample.db")
