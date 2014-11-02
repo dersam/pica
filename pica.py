@@ -1,6 +1,7 @@
 import sqlite3
 import ConfigParser
 import subprocess
+import os
 
 #load config
 config = ConfigParser.ConfigParser()
@@ -28,3 +29,5 @@ for job in jobs:
 crontab.close()
 
 subprocess.call('crontab crontab.cr')
+
+os.remove('crontab.cr')
