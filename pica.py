@@ -6,7 +6,7 @@ import getopt
 
 from pica import config
 from pica import log
-
+from pica.db import database
 
 def main(argv):
     #load config
@@ -20,12 +20,11 @@ def main(argv):
     log.debug('Loaded config from '+path)
 
     #get jobs
-    conn = sqlite3.connect("example/sample.db")
-    c = conn.cursor()
-    c.execute("SELECT command, minute, hour, day_month, month, day_week, label "
-              "FROM crontab WHERE enabled = 1 ORDER BY hour DESC, minute DESC")
-    jobs = c.fetchall()
-    conn.close()
+    db_driver = database.Database(config.get('Database', 'driver'))
+    db_driver.load_driver()
+    db_driver.connect()
+    jobs = db_driver.get_job_list()
+    db_driver.close()
 
     if len(jobs) == 0:
         print('No jobs found for specified crontab')
