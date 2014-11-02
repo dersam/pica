@@ -1,0 +1,9 @@
+[General]
+debug: on
+
+[Database]
+driver: sqlite
+host:
+user:
+password:
+database:

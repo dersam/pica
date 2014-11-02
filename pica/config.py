@@ -14,8 +14,8 @@ def load(path):
 
 def get(section, var):
     p = params.get(section, var)
-    if p.lower() == 'yes':
+    if p.lower() in ('yes', 'on'):
         return True
-    elif p.lower() == 'no':
+    elif p.lower() in ('no', 'off'):
         return False
     return p

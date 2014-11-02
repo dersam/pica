@@ -5,6 +5,7 @@ import sys
 import getopt
 
 from pica import config
+from pica import log
 
 
 def main(argv):
@@ -15,6 +16,8 @@ def main(argv):
         if opt in ('-c', '--configfile'):
             path = arg
     config.load(path)
+
+    log.debug('Loaded config from '+path)
 
     #get jobs
     conn = sqlite3.connect("example/sample.db")
